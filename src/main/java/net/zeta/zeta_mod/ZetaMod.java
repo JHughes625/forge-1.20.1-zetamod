@@ -1,6 +1,8 @@
 package net.zeta.zeta_mod;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -13,6 +15,8 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.zeta.zeta_mod.item.ModCreativeModeTabs;
+import net.zeta.zeta_mod.item.ModItems;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -26,6 +30,10 @@ public class ZetaMod
     public ZetaMod()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        ModCreativeModeTabs.register(modEventBus);
+
+        ModItems.register(modEventBus);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
@@ -47,7 +55,13 @@ public class ZetaMod
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
-
+        if(event.getTabKey() == CreativeModeTabs.COMBAT)
+        {
+            event.accept(ModItems.SWORDOFTHEBRAVE);
+            event.accept(ModItems.BRAVESWORD);
+            event.accept(ModItems.GARRY);
+            event.accept(ModItems.METAL_DETECTOR);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
